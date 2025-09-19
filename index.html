@@ -184,9 +184,41 @@
         map.setView([33.7243396617476, -46.93359375000001], getZoomLevel());
       });
 
-      L.tileLayer(
-        "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
-      ).addTo(map);
+      var worldImagery = L.tileLayer(
+        "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+        {
+          attribution:
+            "Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community",
+        }
+      );
+
+      var darkMap = L.tileLayer(
+        "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+        {
+          attribution:
+            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+          subdomains: "abcd",
+          maxZoom: 19,
+        }
+      );
+
+      var grayMap = L.tileLayer(
+        "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}",
+        {
+          attribution: "Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ",
+          maxZoom: 16,
+        }
+      );
+
+      worldImagery.addTo(map);
+
+      var baseMaps = {
+        "World Imagery": worldImagery,
+        "Dark Map": darkMap,
+        "Gray Map": grayMap,
+      };
+
+      L.control.layers(baseMaps).addTo(map);
 
       // Add draw controls
       var options = {
